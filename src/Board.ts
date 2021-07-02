@@ -22,9 +22,9 @@ export class Board {
     return this.tiles.find((t: Tile) => t.x == x && t.y == y)!;
   }
 
-  public addTileAt(tile: Tile): void {
-    const { x, y, symbol } = tile
-    const foundTile = this.tileAt(x,y);
+  public placeTile(tile: Tile): void {
+    const { x, y, symbol } = tile;
+    const foundTile = this.tileAt(x, y);
     foundTile.symbol = symbol;
   }
 }

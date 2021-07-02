@@ -7,14 +7,14 @@ export class Game {
 
   public play(symbol: Symbol, x: number, y: number): void {
     //if first move
-    if (this.lastPlayer == Symbol.Empty) {
+    if (this.lastPlayer === Symbol.Empty) {
       //if player is X
-      if (symbol == Symbol.O) {
+      if (symbol === Symbol.O) {
         throw new Error("Invalid first player");
       }
     }
     //if not first move but player repeated
-    else if (symbol == this.lastPlayer) {
+    else if (symbol === this.lastPlayer) {
       throw new Error("Invalid next player");
     }
     //if not first move but play on an already played tile
@@ -22,57 +22,45 @@ export class Game {
       throw new Error("Invalid position");
     }
 
-    const tile: Tile = { symbol, x, y }
-    this.updateGameState(tile);
+    const tile: Tile = { symbol, x, y };
+    this.board.placeTile(tile);
+    this.updateLastPlayer(symbol);
   }
 
-  private updateGameState(tile: Tile) {
-    this.board.addTileAt(tile);
-    this.lastPlayer = tile.symbol;
+  private updateLastPlayer(symbol: Symbol) {
+    this.lastPlayer = symbol;
   }
 
   public winner(): string {
-    //if the positions in first row are taken
-    if (
-      this.board.tileAt(0, 0)!.symbol != Symbol.Empty &&
-      this.board.tileAt(0, 1)!.symbol != Symbol.Empty &&
-      this.board.tileAt(0, 2)!.symbol != Symbol.Empty
-    ) {
-      //if first row is full with same symbol
-      if (
-        this.board.tileAt(0, 0)!.symbol == this.board.tileAt(0, 1)!.symbol &&
-        this.board.tileAt(0, 2)!.symbol == this.board.tileAt(0, 1)!.symbol
-      ) {
+    const isRowTaken = (row: number) => {
+      return (
+        this.board.tileAt(row, 1)!.symbol !== Symbol.Empty &&
+        this.board.tileAt(row, 1)!.symbol !== Symbol.Empty &&
+        this.board.tileAt(row, 2)!.symbol !== Symbol.Empty
+      );
+    };
+
+    const isRowFullWithSameSymbol = (row: number) => {
+      return (
+        this.board.tileAt(row, 0)!.symbol ===
+          this.board.tileAt(row, 1)!.symbol &&
+        this.board.tileAt(row, 2)!.symbol === this.board.tileAt(row, 1)!.symbol
+      );
+    };
+    if (isRowTaken(0)) {
+      if (isRowFullWithSameSymbol(0)) {
         return this.board.tileAt(0, 0)!.symbol;
       }
     }
 
-    //if the positions in first row are taken
-    if (
-      this.board.tileAt(1, 0)!.symbol != Symbol.Empty &&
-      this.board.tileAt(1, 1)!.symbol != Symbol.Empty &&
-      this.board.tileAt(1, 2)!.symbol != Symbol.Empty
-    ) {
-      //if middle row is full with same symbol
-      if (
-        this.board.tileAt(1, 0)!.symbol == this.board.tileAt(1, 1)!.symbol &&
-        this.board.tileAt(1, 2)!.symbol == this.board.tileAt(1, 1)!.symbol
-      ) {
+    if (isRowTaken(1)) {
+      if (isRowFullWithSameSymbol(1)) {
         return this.board.tileAt(1, 0)!.symbol;
       }
     }
 
-    //if the positions in first row are taken
-    if (
-      this.board.tileAt(2, 0)!.symbol != Symbol.Empty &&
-      this.board.tileAt(2, 1)!.symbol != Symbol.Empty &&
-      this.board.tileAt(2, 2)!.symbol != Symbol.Empty
-    ) {
-      //if middle row is full with same symbol
-      if (
-        this.board.tileAt(2, 0)!.symbol == this.board.tileAt(2, 1)!.symbol &&
-        this.board.tileAt(2, 2)!.symbol == this.board.tileAt(2, 1)!.symbol
-      ) {
+    if (isRowTaken(2)) {
+      if (isRowFullWithSameSymbol(2)) {
         return this.board.tileAt(2, 0)!.symbol;
       }
     }
