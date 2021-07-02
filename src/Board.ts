@@ -1,28 +1,29 @@
-interface Tile {
-  X: number;
-  Y: number;
-  Symbol: string;
+import { Tile } from "./Tile";
+
+export enum Symbol {
+  O = "O",
+  X = "X",
+  Empty = " ",
 }
 
 export class Board {
-  private _plays: Tile[] = [];
+  private plays: Tile[] = [];
 
   constructor() {
-    for (let i = 0; i < 3; i++) {
-      for (let j = 0; j < 3; j++) {
-        const tile: Tile = { X: i, Y: j, Symbol: " " };
-        this._plays.push(tile);
+    for (let x = 0; x < 3; x++) {
+      for (let y = 0; y < 3; y++) {
+        const tile: Tile = new Tile(x, y, Symbol.Empty);
+        this.plays.push(tile);
       }
     }
   }
 
   public TileAt(x: number, y: number): Tile {
-    return this._plays.find((t: Tile) => t.X == x && t.Y == y)!;
+    return this.plays.find((t: Tile) => t.x == x && t.y == y)!;
   }
 
-  public AddTileAt(symbol: string, x: number, y: number): void {
-    const tile: Tile = { X: x, Y: y, Symbol: symbol };
-
-    this._plays.find((t: Tile) => t.X == x && t.Y == y)!.Symbol = symbol;
+  public AddTileAt(tile: Tile): void {
+    const {x, y, symbol} = tile
+    this.plays.find((t: Tile) => t.x == x && t.y == y)!.symbol = symbol;
   }
 }
