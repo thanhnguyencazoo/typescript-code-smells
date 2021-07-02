@@ -1,8 +1,7 @@
 import { Tile } from "./Tile";
+import { Player } from "./Game";
 
-export enum Symbol {
-  O = "O",
-  X = "X",
+export enum EmptyState {
   Empty = " ",
 }
 
@@ -12,7 +11,7 @@ export class Board {
   constructor() {
     for (let x = 0; x < 3; x++) {
       for (let y = 0; y < 3; y++) {
-        const tile: Tile = new Tile(x, y, Symbol.Empty);
+        const tile: Tile = new Tile(x, y, EmptyState.Empty);
         this.tiles.push(tile);
       }
     }
@@ -22,9 +21,8 @@ export class Board {
     return this.tiles.find((t: Tile) => t.x == x && t.y == y)!;
   }
 
-  public placeTile(tile: Tile): void {
-    const { x, y, symbol } = tile;
+  public placeTile(player: Player, x: number, y: number): void {
     const foundTile = this.tileAt(x, y);
-    foundTile.symbol = symbol;
+    foundTile.symbol = player;
   }
 }
